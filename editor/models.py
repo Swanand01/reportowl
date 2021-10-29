@@ -1,11 +1,19 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
+import random
+import string
 
 # Create your models here.
 
 
+def id_generator():
+    return ''.join(random.choices(
+        string.ascii_letters + string.digits, k=24))
+
+
 class Document(models.Model):
     title = models.CharField(max_length=300)
+    document_id = models.CharField(max_length=24, default=id_generator)
 
     def __str__(self):
         return self.title

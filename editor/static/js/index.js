@@ -1,23 +1,19 @@
-let editor;
-
-ClassicEditor
-    .create(document.querySelector('#editor'))
-    .then(newEditor => {
-        editor = newEditor;
-    })
-    .catch(error => {
-        console.error(error);
+Array.from(document.getElementsByClassName("file-cards")).forEach(function (element) {
+    element.addEventListener("click", function (event) {
+        window.location.href = event.target.querySelector("a").href;
     });
-
-// Assuming there is a <button id="submit">Submit</button> in your application.
-document.querySelector('h1').addEventListener('click', () => {
-    const editorData = editor.getData();
-
-    console.log(typeof (editorData));
 });
 
+document.querySelector("#close-popup-container").addEventListener("click", function (event) {
+    event.target.style.display = "none";
+    document.querySelector(".create-file-popup").style.display = "none";
+});
 
-document.querySelector("#submit1").addEventListener("click", event => {
-    const editorData = editor.getData();
-    document.querySelector("#content1").value = editorData;
+document.querySelector("#addFile-btn").addEventListener("click", function (event) {
+    document.querySelector("#close-popup-container").style.display = "inline-block";
+    document.querySelector(".create-file-popup").style.display = "inline-block";
+});
+
+document.querySelector("#github-btn").addEventListener("click", function (event) {
+    window.open("https://www.github.com/Swanand01/collab-code", '_blank').focus();
 });
