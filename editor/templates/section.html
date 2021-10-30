@@ -1,0 +1,28 @@
+{% extends 'chapter.html' %}
+
+{% block section %}
+<div class="accordion-item">
+    <h2 class="accordion-header" id="headingOneOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseOneOne" aria-expanded="false" aria-controls="collapseOneOne">
+            {% if title1 %}
+            {{title1}}
+            {% else %}
+            New Section
+            {% endif %}
+
+        </button>
+    </h2>
+    <div id="collapseOneOne" class="accordion-collapse collapse" aria-labelledby="headingOneOne"
+        data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="text" name="title1" id="title1" placeholder="Title"><br>
+                <input type="text" name="content1" id="content1">
+                <input type="submit" class="btn btn-primary my-2" id="submit1" value="Add Content">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

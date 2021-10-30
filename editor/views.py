@@ -1,3 +1,4 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from .models import Document, Chapter, Section
 from django.contrib.auth.decorators import login_required
@@ -25,21 +26,19 @@ def index(request):
 
 @login_required
 def editor_view(request, file_id):
-    context = {}
     doc = Document.objects.get(document_id=file_id)
-    
-    if request.method == "POST":
-        title = request.POST['title1']
-        content = request.POST['content1']
-        chapter = Chapter(document=doc, title="Literature Survey", order=1)
-        chapter.save()
-        section = Section(chapter=chapter, title=title,
-                          content=content, order=1)
-        section.save()
-        context = {'title1': title}
+    chapters = Chapter.objects.filter(document=doc)
+    sections = {}
+    for chapter in chapters:
+        sec = Section.objects.filter(chapter=chapter)
+        sections[chapter] = sec
+    print(sections)
+    return render(request, 'editor_view.html', {'document': doc, 'chapters': chapters, 'sections': sections})
 
-    if Section.objects.filter(title="xyz").exists():
-        section = Section.objects.get(title="xyz")
-        context['content1'] = section.content
-        print(section.pk)
-    return render(request, 'editor_view.html', context)
+
+def section_view(request, file_id, slug):
+    return HttpResponse(slug)
+
+
+def chapter_view(request, file_id, slug):
+    return HttpResponse(slug)

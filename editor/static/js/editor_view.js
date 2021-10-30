@@ -21,3 +21,11 @@ document.querySelector("#submit1").addEventListener("click", event => {
     const editorData = editor.getData();
     document.querySelector("#content1").value = editorData;
 });
+
+document.querySelector("#addChapter-btn").addEventListener("click", event => {
+    console.log("Done");
+    // let chapter = document.createElement("div");
+    // chapter.className = "accordion-item";
+    // chapter.innerHTML = `{% include 'chapter.html' %}`
+    // document.querySelector(".chapters-list").appendChild(chapter)
+});
