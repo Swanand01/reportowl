@@ -17,7 +17,7 @@ def index(request):
 
         file_name = request.POST.get('file_name')
 
-        d = Document(name=file_name)
+        d = Document(title=file_name)
         d.save()
 
         return redirect(f'{d.document_id}/')
@@ -36,11 +36,17 @@ def editor_view(request, file_id):
 
 
 def section_view(request, file_id, slug):
-    doc = Document.objects.get(document_id=file_id)
+    #doc = Document.objects.get(document_id=file_id)
     section = Section.objects.get(slug=slug)
 
-    context = {'section': section}
+    if request.method == "POST":
+        print(request.POST)
+        section.title = request.POST.get('section_name')
+        section.content = request.POST.get('content')
+        section.save()
 
+
+    context = {'section': section}
     return render(request, 'section_view.html', context)
 
 
