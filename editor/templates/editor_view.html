@@ -41,10 +41,11 @@
         <ul class="list-group">
             {% for key, value in sections.items %}
             <li class="list-group-item" aria-current="true">
-                <p>{{key.slug}}</p>
+                <a href="{% url 'chapter_view' document.document_id key.slug %}" target="_blank">{{ key.title }}</a>
                 <ul class="list-group">
                     {% for section in value %}
-                    <li class="list-group-item">{{section.title}}</li>
+                    <li class="list-group-item"><a href="{% url 'section_view' document.document_id section.slug %}"
+                            target="_blank">{{ section.title }}</a></li>
                     {% endfor %}
                 </ul>
             </li>

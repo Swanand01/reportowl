@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.template.defaultfilters import slugify
-from autoslug import AutoSlugField
+from django.utils.text import slugify
 import random
 import string
 
@@ -25,7 +24,12 @@ class Chapter(models.Model):
     document = models.ForeignKey(Document, on_delete=CASCADE)
     title = models.CharField(max_length=100)
     order = models.IntegerField()
-    slug = AutoSlugField(populate_from='title')
+    slug = models.SlugField(max_length=110, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Chapter, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -37,7 +41,12 @@ class Section(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
 
-    slug = AutoSlugField(populate_from='title')
+    slug = models.SlugField(max_length=110, unique=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Section, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.title

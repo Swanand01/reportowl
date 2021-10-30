@@ -32,13 +32,22 @@ def editor_view(request, file_id):
     for chapter in chapters:
         sec = Section.objects.filter(chapter=chapter)
         sections[chapter] = sec
-    print(sections)
     return render(request, 'editor_view.html', {'document': doc, 'chapters': chapters, 'sections': sections})
 
 
 def section_view(request, file_id, slug):
-    return HttpResponse(slug)
+    doc = Document.objects.get(document_id=file_id)
+    section = Section.objects.get(slug=slug)
+
+    context = {'section': section}
+
+    return render(request, 'section_view.html', context)
 
 
 def chapter_view(request, file_id, slug):
-    return HttpResponse(slug)
+    doc = Document.objects.get(document_id=file_id)
+    chapter = Chapter.objects.get(document=doc, slug=slug)
+
+    context = {'chapter': chapter}
+
+    return render(request, 'chapter_view.html', context)
