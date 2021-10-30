@@ -1,12 +1,15 @@
 from django.shortcuts import render, redirect
 from .models import Document, Chapter, Section
-import string
-import random
+from django.contrib.auth.decorators import login_required
+
 
 # Create your views here.
 
-
+@login_required
 def index(request):
+    uname = str(request.user)
+    request.session['user_name'] = uname
+
     documents = Document.objects.all()
 
     if request.method == "POST":
@@ -17,12 +20,14 @@ def index(request):
         d.save()
 
         return redirect(f'{d.document_id}/')
-    return render(request, 'index.html', {"documents": documents})
+    return render(request, 'index.html', {"documents": documents, "user_name": uname})
 
 
+@login_required
 def editor_view(request, file_id):
     context = {}
     doc = Document.objects.get(document_id=file_id)
+    
     if request.method == "POST":
         title = request.POST['title1']
         content = request.POST['content1']
@@ -36,4 +41,5 @@ def editor_view(request, file_id):
     if Section.objects.filter(title="xyz").exists():
         section = Section.objects.get(title="xyz")
         context['content1'] = section.content
+        print(section.pk)
     return render(request, 'editor_view.html', context)
