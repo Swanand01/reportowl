@@ -13,9 +13,10 @@
 </head>
 
 <body>
+    <h3>{{chapter.title}}</h3>
     <form action="" method="post" id="form">
         {% csrf_token %}
-        <input type="text" name="section_name" id="section_name" value="{{section.title}}">
+        <input type="text" name="section_name" id="section_name" value="{{section.title}}" required placeholder="Enter section name">
         <input hidden type="text" name="content" id="content">
         <input type="submit" value="Save" id="submit">
     </form>
