@@ -1,5 +1,6 @@
 let editor;
 let form = document.querySelector('#form');
+
 ClassicEditor
     .create(document.querySelector('#editor'))
     .then(newEditor => {
