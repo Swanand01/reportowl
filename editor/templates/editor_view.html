@@ -50,18 +50,14 @@
                     <li class="list-group-item"><a href="{% url 'section_view' document.document_id chapter.slug section.slug %}"
                             target="_blank">{{ section.title }}</a></li>
                     {% endfor %}
-                    
                 </ul>
                 <a class="btn btn-primary open_new" href="{% url 'new_section_view' document.document_id chapter.slug %}" target="_blank">Add section</a>
             </li>
             
             {% endfor %}
             {% endif %}
-            <form action="" method="post">
-                {% csrf_token %}
-                <button type="submit" name="add_chapter" class="btn btn-primary" id="add_chapter" value="Add chapter">Add chapter</button>
-            </form>
         </ul>
+        <a class="btn btn-primary" href="{% url 'new_chapter_view' document.document_id %}" target="_blank">Add chapter</a>
         
     </main>
 
