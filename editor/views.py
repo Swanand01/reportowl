@@ -19,7 +19,7 @@ def index(request):
         d = Document(title=file_name)
         d.save()
 
-        return redirect(f'{d.document_id}/')
+        return redirect("editor_view", file_id=d.document_id)
     return render(request, 'index.html', {"documents": documents, "user_name": uname})
 
 
@@ -28,7 +28,6 @@ def editor_view(request, file_id):
     doc = Document.objects.get(document_id=file_id)
 
     if Chapter.objects.filter(document=doc).exists():
-
         chapters = Chapter.objects.filter(document=doc)
         sections = {}
         for chapter in chapters:
@@ -37,7 +36,7 @@ def editor_view(request, file_id):
 
         context = {'document': doc, 'chapters': chapters, 'sections': sections}
     else:
-        context = {}
+        context = {'document': doc}
     return render(request, 'editor_view.html', context)
 
 
