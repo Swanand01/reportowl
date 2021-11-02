@@ -5,8 +5,6 @@ from .models import Document, Chapter, Section
 from django.contrib.auth.decorators import login_required
 
 
-# Create your views here.
-
 @login_required
 def index(request):
     uname = str(request.user)
@@ -28,21 +26,6 @@ def index(request):
 @login_required
 def editor_view(request, file_id):
     doc = Document.objects.get(document_id=file_id)
-
-    # if request.method == "POST":
-    #     if request.POST.get("add_chapter"):
-    #         print("Chapter added")
-    #     elif request.POST.get("add_section"):
-    #         chapter_title = request.POST.get("chapter_title")
-    #         print(chapter_title)
-    #         chapter = Chapter.objects.get(title=chapter_title, document=doc)
-    #         if Section.objects.filter(chapter=chapter, title="New Section").exists():
-    #             print("Already exists")
-    #         else:
-    #         section = Section(chapter=chapter)
-    #         section.save()
-    #         print(section.slug)
-    #         redirect("section_view", file_id=file_id, chapter_slug=chapter.slug, section_slug=section.slug)
 
     if Chapter.objects.filter(document=doc).exists():
 
@@ -84,9 +67,39 @@ def chapter_view(request, file_id, slug):
     doc = Document.objects.get(document_id=file_id)
     chapter = Chapter.objects.get(document=doc, slug=slug)
 
+    if request.method == "POST":
+        chapter_title = request.POST.get('chapter_name')
+        if Chapter.objects.filter(document=doc, title=chapter_title).exists():
+            chapter.description = request.POST.get('content')
+            chapter.save()
+        else:
+            chapter.title = request.POST.get('chapter_name')
+            chapter.description = request.POST.get('content')
+            chapter.save()
+
+            return redirect("chapter_view", file_id=file_id, slug=chapter.slug)
+
     context = {'chapter': chapter}
 
     return render(request, 'chapter_view.html', context)
+
+
+def new_chapter_view(request, file_id):
+    doc = Document.objects.get(document_id=file_id)
+
+    if request.method == "POST":
+        chapter_title = request.POST.get('chapter_name')
+        chapter_content = request.POST.get('content')
+
+        if Chapter.objects.filter(document=doc, title=chapter_title).exists():
+            print("Already exists")
+        else:
+            chapter = Chapter(
+                document=doc, title=chapter_title, description=chapter_content)
+            chapter.save()
+            return redirect("chapter_view", file_id=file_id, slug=chapter.slug)
+
+    return render(request, 'chapter_view.html')
 
 
 def new_section_view(request, file_id, chapter_slug):
@@ -106,5 +119,4 @@ def new_section_view(request, file_id, chapter_slug):
             return redirect("section_view", file_id=file_id,
                             chapter_slug=chapter_slug, section_slug=section.slug)
 
-    #context = {'section': section}
     return render(request, 'section_view.html')

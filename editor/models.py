@@ -4,7 +4,6 @@ from django.utils.text import slugify
 import random
 import string
 
-# Create your models here.
 
 
 def id_generator():
@@ -23,6 +22,7 @@ class Document(models.Model):
 class Chapter(models.Model):
     document = models.ForeignKey(Document, on_delete=CASCADE)
     title = models.CharField(max_length=100)
+    description = models.TextField(default='')
     slug = models.SlugField(max_length=110, unique=True)
 
     def save(self, *args, **kwargs):
