@@ -5,7 +5,6 @@ import random
 import string
 
 
-
 def id_generator():
     return ''.join(random.choices(
         string.ascii_letters + string.digits, k=24))
@@ -23,11 +22,10 @@ class Chapter(models.Model):
     document = models.ForeignKey(Document, on_delete=CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField(default='')
-    slug = models.SlugField(max_length=110, unique=True)
+    slug = models.SlugField(max_length=110)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
+        self.slug = slugify(self.title)
         super(Chapter, self).save(*args, **kwargs)
 
     def __str__(self):
